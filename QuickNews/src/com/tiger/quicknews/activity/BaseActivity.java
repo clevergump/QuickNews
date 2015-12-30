@@ -42,6 +42,7 @@ public class BaseActivity extends SlidingActivity {
 
     @Override
     public void onResume() {
+        Toast.makeText(this, getClass().getSimpleName(), 0).show();
         super.onResume();
         // baseActivityHelper.onResume();
     }
@@ -112,8 +113,6 @@ public class BaseActivity extends SlidingActivity {
 
     /**
      * 显示dialog
-     * 
-     * @param msg 显示内容
      */
     public void showProgressDialog() {
         try {

@@ -97,15 +97,11 @@ public final class DetailsActivity_
         newTitle = ((TextView) hasViews.findViewById(id.new_title));
         if (newImg!= null) {
             newImg.setOnClickListener(new OnClickListener() {
-
-
                 @Override
                 public void onClick(View view) {
                     DetailsActivity_.this.imageMore(view);
                 }
-
-            }
-            );
+            });
         }
         initWebView();
     }

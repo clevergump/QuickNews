@@ -11,19 +11,16 @@ import com.tiger.quicknews.wedget.city.ContactListAdapter;
 
 import java.util.List;
 
-public class CityAdapter extends ContactListAdapter
-{
+public class CityAdapter extends ContactListAdapter {
 
     public CityAdapter(Context _context, int _resource,
-            List<ContactItemInterface> _items)
-    {
+                       List<ContactItemInterface> _items) {
         super(_context, _resource, _items);
     }
 
     @Override
     public void populateDataForRow(View parentView, ContactItemInterface item,
-            int position)
-    {
+                                   int position) {
         View infoView = parentView.findViewById(R.id.infoRowContainer);
         TextView nicknameView = (TextView) infoView
                 .findViewById(R.id.cityName);

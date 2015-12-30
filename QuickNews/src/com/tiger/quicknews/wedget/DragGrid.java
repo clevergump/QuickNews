@@ -103,6 +103,13 @@ public class DragGrid extends GridView {
         mHorizontalSpacing = DataTools.dip2px(context, mHorizontalSpacing);
     }
 
+    /** 在ScrollView内，所以要进行计算高度 */
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
+        super.onMeasure(widthMeasureSpec, expandSpec);
+    }
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -110,7 +117,8 @@ public class DragGrid extends GridView {
             downY = (int) ev.getY();
             windowX = (int) ev.getX();
             windowY = (int) ev.getY();
-            setOnItemClickListener(ev);
+            // 每发生一次ACTION_DOWN事件, 就要注册一次长按事件的监听器
+            setLongClickListener(ev);
         }
         return super.onInterceptTouchEvent(ev);
     }
@@ -152,6 +160,11 @@ public class DragGrid extends GridView {
         return super.onTouchEvent(ev);
     }
 
+
+    /******************************* private方法 *********************************************/
+
+
+
     /** 在拖动的情况 */
     private void onDrag(int x, int y, int rawx, int rawy) {
         if (dragImageView != null) {
@@ -185,46 +198,57 @@ public class DragGrid extends GridView {
      * 
      * @param ev
      */
-    public void setOnItemClickListener(final MotionEvent ev) {
+    private void setLongClickListener(final MotionEvent ev) {
         setOnItemLongClickListener(new OnItemLongClickListener() {
-
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                     int position, long id) {
-                int x = (int) ev.getX();// 长安事件的X位置
-                int y = (int) ev.getY();// 长安事件的y位置
+                int x = (int) ev.getX();// 长按事件的X位置
+                int y = (int) ev.getY();// 长按事件的y位置
 
                 startPosition = position;// 第一次点击的postion
                 dragPosition = position;
+                // 前两个item不允许点击和拖拽
                 if (startPosition <= 1) {
                     return false;
                 }
-                ViewGroup dragViewGroup = (ViewGroup) getChildAt(dragPosition
-                        - getFirstVisiblePosition());
+                ViewGroup dragViewGroup = (ViewGroup) getChildAt(dragPosition - getFirstVisiblePosition());
                 TextView dragTextView = (TextView) dragViewGroup.findViewById(R.id.text_item);
+                // 文字和边框都变为红色
                 dragTextView.setSelected(true);
                 dragTextView.setEnabled(false);
                 itemHeight = dragViewGroup.getHeight();
                 itemWidth = dragViewGroup.getWidth();
                 itemTotalCount = DragGrid.this.getCount();
+
+                // 每行都填满的行的数量(最后一行如果不填满, 则不计算在内)
                 int row = itemTotalCount / nColumns;// 算出行数
+                // 最后一行中item的数量.
                 Remainder = (itemTotalCount % nColumns);// 算出最后一行多余的数量
+                // 计算出实际的总行数. 如果最后一行未填充满, 则实际的总行数是上述已填充满的行数+1.
                 if (Remainder != 0) {
                     nRows = row + 1;
                 } else {
                     nRows = row;
                 }
+
                 // 如果特殊的这个不等于拖动的那个,并且不等于-1
                 if (dragPosition != AdapterView.INVALID_POSITION) {
-                    // 释放的资源使用的绘图缓存。如果你调用buildDrawingCache()手动没有调用setDrawingCacheEnabled(真正的),你应该清理缓存使用这种方法。
+                    // 释放的资源使用的绘图缓存。如果你调用buildDrawingCache()手动没有调用
+                    // setDrawingCacheEnabled(真正的),你应该清理缓存使用这种方法。
                     win_view_x = windowX - dragViewGroup.getLeft();// VIEW相对自己的X，半斤
                     win_view_y = windowY - dragViewGroup.getTop();// VIEW相对自己的y，半斤
                     dragOffsetX = (int) (ev.getRawX() - x);// 手指在屏幕的上X位置-手指在控件中的位置就是距离最左边的距离
                     dragOffsetY = (int) (ev.getRawY() - y);// 手指在屏幕的上y位置-手指在控件中的位置就是距离最上边的距离
                     dragItemView = dragViewGroup;
+
+                    // 先释放掉上一次缓存所占用的资源
                     dragViewGroup.destroyDrawingCache();
+                    // 开启item View 的 Bitmap缓存功能.
                     dragViewGroup.setDrawingCacheEnabled(true);
+                    // 从item View对象 (dragViewGroup) 中创建与之对应的Bitmap图像, 并存入缓存.
                     Bitmap dragBitmap = Bitmap.createBitmap(dragViewGroup.getDrawingCache());
+
                     mVibrator.vibrate(50);// 设置震动时间
                     startDrag(dragBitmap, (int) ev.getRawX(), (int) ev.getRawY());
                     hideDropItem();
@@ -238,7 +262,7 @@ public class DragGrid extends GridView {
         });
     }
 
-    public void startDrag(Bitmap dragBitmap, int x, int y) {
+    private void startDrag(Bitmap dragBitmap, int x, int y) {
         stopDrag();
         windowParams = new WindowManager.LayoutParams();// 获取WINDOW界面的
         // Gravity.TOP|Gravity.LEFT;这个必须加
@@ -275,20 +299,13 @@ public class DragGrid extends GridView {
         }
     }
 
-    /** 在ScrollView内，所以要进行计算高度 */
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, expandSpec);
-    }
-
     /** 隐藏 放下 的ITEM */
     private void hideDropItem() {
         ((DragAdapter) getAdapter()).setShowDropItem(false);
     }
 
     /** 获取移动动画 */
-    public Animation getMoveAnimation(float toXValue, float toYValue) {
+    private Animation getMoveAnimation(float toXValue, float toYValue) {
         TranslateAnimation mTranslateAnimation = new TranslateAnimation(
                 Animation.RELATIVE_TO_SELF, 0.0F,
                 Animation.RELATIVE_TO_SELF, toXValue,
@@ -300,7 +317,7 @@ public class DragGrid extends GridView {
     }
 
     /** 移动的时候触发 */
-    public void OnMove(int x, int y) {
+    private void OnMove(int x, int y) {
         // 拖动的VIEW下方的POSTION
         int dPosition = pointToPosition(x, y);
         // 判断下方的POSTION是否是最开始2个不能拖动的

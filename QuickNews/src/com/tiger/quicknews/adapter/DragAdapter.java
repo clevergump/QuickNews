@@ -1,4 +1,3 @@
-
 package com.tiger.quicknews.adapter;
 
 import android.content.Context;
@@ -17,22 +16,22 @@ import java.util.List;
 public class DragAdapter extends BaseAdapter {
     /** TAG */
     private final static String TAG = "DragAdapter";
-    /** ÊÇ·ñÏÔÊ¾µ×²¿µÄITEM */
+    /** æ˜¯å¦æ˜¾ç¤ºåº•éƒ¨çš„ITEM */
     private boolean isItemShow = false;
     private final Context context;
-    /** ¿ØÖÆµÄpostion */
+    /** æ§åˆ¶çš„postion */
     private int holdPosition;
-    /** ÊÇ·ñ¸Ä±ä */
+    /** æ˜¯å¦æ”¹å˜ */
     private boolean isChanged = false;
-    /** ÁĞ±íÊı¾İÊÇ·ñ¸Ä±ä */
+    /** åˆ—è¡¨æ•°æ®æ˜¯å¦æ”¹å˜ */
     private boolean isListChanged = false;
-    /** ÊÇ·ñ¿É¼û */
+    /** æ˜¯å¦å¯è§ */
     boolean isVisible = true;
-    /** ¿ÉÒÔÍÏ¶¯µÄÁĞ±í£¨¼´ÓÃ»§Ñ¡ÔñµÄÆµµÀÁĞ±í£© */
+    /** å¯ä»¥æ‹–åŠ¨çš„åˆ—è¡¨ï¼ˆå³ç”¨æˆ·é€‰æ‹©çš„é¢‘é“åˆ—è¡¨ï¼‰ */
     public List<ChannelItem> channelList;
-    /** TextView ÆµµÀÄÚÈİ */
+    /** TextView é¢‘é“å†…å®¹ */
     private TextView item_text;
-    /** ÒªÉ¾³ıµÄposition */
+    /** è¦åˆ é™¤çš„position */
     public int remove_position = -1;
 
     public DragAdapter(Context context, List<ChannelItem> channelList) {
@@ -64,12 +63,19 @@ public class DragAdapter extends BaseAdapter {
         item_text = (TextView) view.findViewById(R.id.text_item);
         ChannelItem channel = getItem(position);
         item_text.setText(channel.getName());
+        // å‰ä¸¤ä¸ªæ ‡ç­¾æ˜¯å›ºå®šä¸å˜çš„, ä¸å…è®¸åˆ é™¤æˆ–ç§»åŠ¨ä½ç½®.
         if ((position == 0) || (position == 1)) {
             // item_text.setTextColor(context.getResources().getColor(R.color.black));
+            // å‰ä¸¤ä¸ªæ ‡ç­¾æœªä½¿èƒ½, æ˜¯ç°è‰²èƒŒæ™¯
             item_text.setEnabled(false);
         }
+
+        /******************************************************************************
+         *** åœ¨è¿›å…¥è¯¥é¡µé¢åæœªè¿›è¡Œä»»ä½•æ“ä½œæ—¶, ä¸‹é¢çš„è¿™å‡ ä¸ªifåˆ¤æ–­éƒ½ä¸æˆç«‹, éƒ½ä¸ä¼šæ‰§è¡Œ.  ******
+         ******************************************************************************/
         if (isChanged && (position == holdPosition) && !isItemShow) {
             item_text.setText("");
+            // ä»¥ä¸‹ä¸¤ä¸ªè®¾ç½®ä¼šè®©è¯¥ä½ç½®çš„itemçš„è¾¹æ¡†å˜ä¸ºç°è‰²è™šçº¿è¾¹æ¡†. è§æ–‡ä»¶ res/drawable/subscribe_item_bg.xml
             item_text.setSelected(true);
             item_text.setEnabled(true);
             isChanged = false;
@@ -85,42 +91,46 @@ public class DragAdapter extends BaseAdapter {
         return view;
     }
 
-    /** Ìí¼ÓÆµµÀÁĞ±í */
+    /** æ·»åŠ é¢‘é“åˆ—è¡¨ */
     public void addItem(ChannelItem channel) {
         channelList.add(channel);
         isListChanged = true;
         notifyDataSetChanged();
     }
 
-    /** ÍÏ¶¯±ä¸üÆµµÀÅÅĞò */
+    /** æ‹–åŠ¨å˜æ›´é¢‘é“æ’åº */
     public void exchange(int dragPostion, int dropPostion) {
         holdPosition = dropPostion;
         ChannelItem dragItem = getItem(dragPostion);
         Log.d(TAG, "startPostion=" + dragPostion + ";endPosition=" + dropPostion);
-        if (dragPostion < dropPostion) {
-            channelList.add(dropPostion + 1, dragItem);
-            channelList.remove(dragPostion);
-        } else {
-            channelList.add(dropPostion, dragItem);
-            channelList.remove(dragPostion + 1);
-        }
+//        if (dragPostion < dropPostion) {
+//            channelList.add(dropPostion + 1, dragItem);
+//            channelList.remove(dragPostion);
+//        } else {
+//            channelList.add(dropPostion, dragItem);
+//            channelList.remove(dragPostion + 1);
+//        }
+
+        channelList.remove(dragPostion);
+        channelList.add(dropPostion, dragItem);
+
         isChanged = true;
         isListChanged = true;
         notifyDataSetChanged();
     }
 
-    /** »ñÈ¡ÆµµÀÁĞ±í */
+    /** è·å–é¢‘é“åˆ—è¡¨ */
     public List<ChannelItem> getChannnelLst() {
         return channelList;
     }
 
-    /** ÉèÖÃÉ¾³ıµÄposition */
+    /** è®¾ç½®åˆ é™¤çš„position */
     public void setRemove(int position) {
         remove_position = position;
         notifyDataSetChanged();
     }
 
-    /** É¾³ıÆµµÀÁĞ±í */
+    /** åˆ é™¤é¢‘é“åˆ—è¡¨ */
     public void remove() {
         channelList.remove(remove_position);
         remove_position = -1;
@@ -128,28 +138,29 @@ public class DragAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    /** ÉèÖÃÆµµÀÁĞ±í */
+    /** è®¾ç½®é¢‘é“åˆ—è¡¨ */
     public void setListDate(List<ChannelItem> list) {
         channelList = list;
     }
 
-    /** »ñÈ¡ÊÇ·ñ¿É¼û */
+    /** è·å–æ˜¯å¦å¯è§ */
     public boolean isVisible() {
         return isVisible;
     }
 
-    /** ÅÅĞòÊÇ·ñ·¢Éú¸Ä±ä */
+    /** æ’åºæ˜¯å¦å‘ç”Ÿæ”¹å˜ */
     public boolean isListChanged() {
         return isListChanged;
     }
 
-    /** ÉèÖÃÊÇ·ñ¿É¼û */
+    /** è®¾ç½®æ˜¯å¦å¯è§ */
     public void setVisible(boolean visible) {
         isVisible = visible;
     }
 
-    /** ÏÔÊ¾·ÅÏÂµÄITEM */
+    /** æ˜¾ç¤ºæ”¾ä¸‹çš„ITEM */
     public void setShowDropItem(boolean show) {
         isItemShow = show;
     }
+
 }
