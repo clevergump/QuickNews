@@ -2,9 +2,9 @@ QuickNews
 =========
 This is a news client, similar to netease, news headlines
 
-Set up(eclipse)
+Forked from <a href="https://github.com/tigerguixh/QuickNews" target="_blank">tigerguixh/QuickNews</a> and has been migrated to standard Gradle project.
 
-QuickNews is a run project and vitamio is  a  library project.
+Originally developed By <a href="https://github.com/tigerguixh">tigerguixh</a> whose email is 582650514 @qq.com.
 
 ![image](https://raw.githubusercontent.com/tigerguixh/QuickNews/master/jietu.gif)
 
@@ -22,11 +22,3 @@ Special Thanks
 <a href="https://github.com/jfeinstein10/SlidingMenu">slidingmenu </a> by jfeinstein10<br>
 
 and  Thanks netease Tencent provide data<br>
-
-Developed By
-
-<a href="https://github.com/tigerguixh">tigerguixh</a><br>
-
-Last
-
-May also need a lot of optimization, if there are any mistakes or Suggestions at understanding or contact me 582650514 @qq.com

@@ -7,11 +7,13 @@
 *.war
 *.ear
 
+/app/build
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
 # =========================
 # Operating System Files
+/.idea
 # =========================
 
 # OSX
@@ -39,6 +41,9 @@ ehthumbs.db
 
 # Folder config file
 Desktop.ini
+/build
+/vitamio/build
+/.gradle
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/

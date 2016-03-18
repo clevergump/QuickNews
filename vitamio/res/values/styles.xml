@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-<!-- Application theme. -->
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
-        <!-- API 11 theme customizations can go here. -->
-    </style>
-    <style name="AppTheme" parent="AppBaseTheme">
 
-    </style>
     
     <style name="MediaController_SeekBar" parent="android:Widget.SeekBar">
         <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_dark</item>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 当系统识别到这次点击属于长按时, 将会切换到的状态  state_selected.
+        所以一次长按将会先经历 pressed状态, 再经历 selected状态 -->
+    <item android:state_selected="true" android:color="@color/subscribe_item_selected_stroke" />
+    <!-- 当系统识别到这次点击属于短按时, 将会切换到的状态  state_pressed -->
+    <item android:state_pressed="true" android:color="@color/subscribe_item_text_color_pressed" />
+    <item android:color="@color/subscribe_item_text_color_normal" />
+</selector>

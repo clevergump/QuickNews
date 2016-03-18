@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * See {@link io.vov.vitamio.MediaPlayer#getMetadata()}
+ * See {@link MediaPlayer#getMetadata()}
  */
 public class Metadata {
   public static final int ANY = 0;

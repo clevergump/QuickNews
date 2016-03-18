@@ -61,7 +61,7 @@ import java.util.Map;
  * provides various display options such as scaling and tinting.
  * <p/>
  * VideoView also provide many wrapper methods for
- * {@link io.vov.vitamio.MediaPlayer}, such as {@link #getVideoWidth()},
+ * {@link MediaPlayer}, such as {@link #getVideoWidth()},
  * {@link #setTimedTextShown(boolean)}
  */
 public class VideoView extends SurfaceView implements MediaController.MediaPlayerControl {

@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+
+    defaultConfig {
+        applicationId "com.tiger.quicknews"
+        minSdkVersion 15
+        targetSdkVersion 23
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:19.1.0'
+    compile files('libs/androidannotations-api-3.1.jar')
+    compile files('libs/com.haarman.listviewanimations-2.6.0.jar')
+    compile files('libs/nineoldandroids-2.4.0.jar')
+    compile files('libs/picasso-2.3.1.jar')
+    compile files('libs/umeng-analytics-v5.2.3.jar')
+    compile files('libs/umeng-fb-v4.3.2.jar')
+    compile files('libs/umeng-update-v2.4.2.jar')
+    compile files('libs/universal-image-loader-1.9.2-SNAPSHOT-with-sources.jar')
+    compile files('libs/viewpagertransformslibrary.jar')
+    compile files('libs/volley.jar')
+    compile project(':vitamio')
+    compile files('libs/httpclient-4.2.5.jar')
+    compile files('libs/httpcore-4.2.4.jar')
+}
